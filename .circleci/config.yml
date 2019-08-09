@@ -42,7 +42,7 @@ steps:
       command: appium &
 
   # run tests!
-  - run: java -cp "/home/circleci/ciricleCI_appium_java/lib/*:/home/circleci/repo/bin/" org.testng.TestNG testng.xml
+  - run: java -cp "/home/circleci/ciricleCI_appium_java/lib/*:/home/circleci/ciricleCI_appium_java/bin/" org.testng.TestNG testng.xml
     
     - store_artifacts:
           path:  test-output
