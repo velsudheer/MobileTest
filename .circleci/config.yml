@@ -1,49 +1,50 @@
-working_directory: ~/ciricleCI_appium_java
-
-environment:
-  # Customize the JVM maximum heap limit
-  MAVEN_OPTS: -Xmx3200m
-  ANDROID_HOME: /usr/local/android-sdk-linux
-
-steps:
-  - checkout
-
-  # Download and cache dependencies
-
-  - restore_cache:
-      keys:
-      - v1-dependencies-{{ checksum "pom.xml" }}
-      # fallback to using the latest cache if no exact match is found
-      - v1-dependencies-
-
-  - run: mvn dependency:go-offline
-
-  - run:
-      name: Install node 
-      command: |
-             curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-             sudo apt-get install -y nodejs
-             sudo apt-get install -y build-essential
-             sudo apt-get install build-essential curl git m4 python-setuptools ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
-  - run:
-      name: Install appium server
-      command: |
-        sudo npm update -g
-        sudo npm install appium
-        sudo npm install wd
-
-  - save_cache:
-      paths:
-        - ~/.m2
-      key: v1-dependencies-{{ checksum "pom.xml" }}
-    
-  - run:
-      name: Start appium server
-      command: appium &
-      background: true
-  - run: appium -v
-  # run tests!
-  #- run: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
-    
-    - store_artifacts:
+version: 2
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-28-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+         name: Chmod permissions
+         command: sudo chmod +x ./gradlew
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Lists installed targets
+          command: android list target
+          environment:
+          TERM: dumb
+      - run:
+          name: Show list of system-images
+          command: sdkmanager --list --verbose | grep system-images
+      - run:
+          name: Setup Emulator
+          command: sdkmanager "system-images;android-21;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-21;default;armeabi-v7a"
+      - run:
+          name: Launch Emulator
+          command: |
+                  cd ${ANDROID_HOME}/emulator;ls
+                  export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib
+                  emulator -avd test -no-window -noaudio -no-boot-anim -no-window -accel on
+          background: true
+      - run:
+          name: Wait emulator
+          command: |
+              circle-android wait-for-boot
+              adb shell input keyevent 82
+      - run:
+          name: Run TestNG Tests
+          command: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
+      - store_artifacts:
           path:  test-output
