@@ -41,7 +41,7 @@ steps:
       name: Start appium server
       command: appium &
       background: true
-
+  - run: appium -v
   # run tests!
   #- run: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
     
