@@ -40,9 +40,10 @@ steps:
   - run:
       name: Start appium server
       command: appium &
+      background: true
 
   # run tests!
-  - run: java -cp "/home/circleci/ciricleCI_appium_java/lib/*:/home/circleci/ciricleCI_appium_java/bin/" org.testng.TestNG testng.xml
+  - run: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
     
     - store_artifacts:
           path:  test-output
