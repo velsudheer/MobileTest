@@ -43,7 +43,7 @@ steps:
       background: true
 
   # run tests!
-  - run: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
+  #- run: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
     
     - store_artifacts:
           path:  test-output
