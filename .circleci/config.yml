@@ -11,7 +11,7 @@ jobs:
       - checkout
       - run:
           name: Setup emulator
-          command: y | sdkmanager --licenses && y | sdkmanager --update | y | sdkmanager "system-images;android-16;default;armeabi-v7a" && echo "y" | avdmanager create avd -n test -k "system-images;android-16;default;armeabi-v7a"
+          command: y | sdkmanager --licenses && y | sdkmanager --update | y | sdkmanager "system-images;android-16;default;armeabi-v7a" && echo y | avdmanager create avd -n test -k "system-images;android-16;default;armeabi-v7a" y
       - run:
           name: Launch emulator
           command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel auto -verbose
