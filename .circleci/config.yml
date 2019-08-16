@@ -67,6 +67,6 @@ jobs:
           name: Start appium server
           command: appium &
           background: true
-    
-    - run: java -cp "/home/circleci/workspace/lib/eclipse.jar:/home/circleci/workspace/lib/beanshell.bsh.b6.jar:/home/circleci/workspace/lib/snakeyaml.jar:/home/circleci/workspace/lib/selenium-server-standalone-3.141.59.jar:/home/circleci/workspace/lib/testng-6.14.3.jar:/home/circleci/workspace/lib/jcommander-1.7.jar:/home/circleci/workspace/lib/bin/" org.testng.TestNG testng.xml
+    - run: pwd
+    - run: java -cp "/workspace/lib/eclipse.jar:/workspace/lib/beanshell.bsh.b6.jar:/workspace/lib/snakeyaml.jar:/workspace/lib/selenium-server-standalone-3.141.59.jar:/workspace/lib/testng-6.14.3.jar:/workspace/lib/jcommander-1.7.jar:/workspace/lib/bin/" org.testng.TestNG testng.xml
     
