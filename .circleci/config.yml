@@ -1,195 +1,53 @@
 version: 2
-reference:
-
-  ## Workspaces
-  workspace: &workspace
-    ~/flyve_mdm
-
-  ## Docker image configurations
-  android_config: &android_config
-    working_directory: *workspace
-    docker:
-      - image: circleci/android:api-28-node8-alpha
-    environment:
-      TERM: dumb
-      _JAVA_OPTIONS: "-Xmx2048m -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m"'
-
-  ## Cache
-  gradle_key: &gradle_key
-    jars-v1-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
-
-  apk_certified_key: &apk_certified_key
-    apk-certified-v1-{{ .Environment.CIRCLE_WORKFLOW_ID }}
-
-  restore_gradle_cache: &restore_gradle_cache
-    restore_cache:
-      key: *gradle_key
-
-  restore_apk_certified_cache: &restore_apk_certified_cache
-    restore_cache:
-      key: *apk_certified_key
-
-  save_gradle_cache: &save_gradle_cache
-    save_cache:
-      key: *gradle_key
-      paths:
-        - ~/.gradle
-        - ~/.m2
-
-  save_apk_certified_cache: &save_apk_certified_cache
-    save_cache:
-      key: *apk_certified_key
-      environment:
-        WORKSPACE: *workspace
-      paths:
-        - $WORKSPACE/app/build/outputs/apk/release/appCertified.apk
-      destination:
-        - $WORKSPACE/release/appCertified.apk
-
-  ## Dependencies
-  ruby_dependencies: &ruby_dependencies
-    run:
-      name: Download Ruby Dependencies
-      command: source ci/scripts/setup_ruby_gems.sh
-
-  android_dependencies: &android_dependencies
-    run:
-      name: Download Android Dependencies
-      command: ./gradlew androidDependencies
-
-  validate_running: &validate_running
-    run:
-      name: Validate running
-      command: source ci/scripts/validate_running.sh
-
-  update_licenses: &update_licenses
-    run:
-      name: Update licenses
-      command: source ci/scripts/ci_licenses.sh
 jobs:
-  # unit test
   build:
-    <<: *android_config
+    working_directory: ~/code
+    docker:
+      - image: bitriseio/docker-android:v2017_09_09-06_45-b744
+
+    working_directory: ~/workspace
+    environment:
+      JVM_OPTS: -Xmx3200m
     steps:
       - checkout
-      - *update_licenses
-      - *validate_running
-      - *restore_gradle_cache
-      - *ruby_dependencies
-      - *android_dependencies
-      - *save_gradle_cache
       - run:
-          name: Run test
-          command: ./gradlew test
+         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
+         command: sudo chmod +x ./gradlew
 
-  # Test Instrumentation with Android 4.1 JELLY_BEAN API 16
-  test_instrumentation:
-    <<: *android_config
-    steps:
-      - checkout
-      - *update_licenses
-      - *validate_running
-      - *restore_gradle_cache
-      - *ruby_dependencies
-      - *android_dependencies
-      - *save_gradle_cache
       - run:
-          name: Create debug apk
-          command: ./gradlew assembleDebug assembleAndroidTest
+          command: echo y | android update sdk -u -a -t tools
       - run:
-          name: Run Tests on Firebase test lab
-          command: source ci/scripts/google_cloud.sh
+          command: echo y | android update sdk -u -a -t platform-tools
+      - run:
+          command: echo y | android update sdk -u -a -t build-tools-25.0.2
+      - run:
+          command: echo y | android update sdk -u -a -t android-25
 
-  check_transifex:
-    <<: *android_config
-    steps:
-      - checkout
-      - *update_licenses
-      - *validate_running
-      - *restore_gradle_cache
-      - *ruby_dependencies
-      - *android_dependencies
-      - *save_gradle_cache
       - run:
-          name: Setup environment
-          command: source ci/scripts/setup_environment.sh
+          name: List available targets and other sdk modules
+          command: sdkmanager --list --include_obsolete --verbose
       - run:
-          name: Pull transifex
-          command: tx pull --all --force
+          command: echo y | node --version
       - run:
-          name: Create debug apk
-          command: ./gradlew assemble
+          command: echo y | npm --version
+      - run:
+          command: sudo npm i -g appium --unsafe-perm=true --allow-root
+      - run:
+          name: List available targets and other sdk modules
+          command: sdkmanager --list --include_obsolete --verbose
+      - run:
+          command: echo no | avdmanager create avd -n test -k "system-images;android-25;google_apis;armeabi-v7a"
+      - run:
+          command: /opt/android-sdk-linux/emulator/emulator -avd test -no-audio -no-window -no-boot-anim  -accel on
+          background: true
 
-  deploy_alpha:
-    <<: *android_config
-    steps:
-      - checkout
-      - *update_licenses
-      - *validate_running
-      - *restore_gradle_cache
-      - *ruby_dependencies
-      - *android_dependencies
-      - *save_gradle_cache
-      - *restore_apk_certified_cache
       - run:
-          name: Setup environment
-          command: source ci/scripts/setup_environment.sh
+          command: adb shell input keyevent 82
       - run:
-          name: Update version code
-          command: ./gradlew updateVersionCode -P vVersion=$CIRCLE_BUILD_NUM
+          command: adb devices
       - run:
-          name: Generate certified apk
-          command: source ci/scripts/app_certification.sh
+          command: echo y | adb devices
       - run:
-          name: Deploy Alpha
-          command: source ci/scripts/deploy_alpha.sh
-
-  deploy_production:
-    <<: *android_config
-    steps:
-      - checkout
-      - *update_licenses
-      - *validate_running
-      - *restore_gradle_cache
-      - *ruby_dependencies
-      - *android_dependencies
-      - *save_gradle_cache
-      - *restore_apk_certified_cache
-      - run:
-          name: Setup environment
-          command: source ci/scripts/setup_environment.sh
-      - run:
-          name: Update version code
-          command: ./gradlew updateVersionCode -P vVersion=$CIRCLE_BUILD_NUM
-      - run:
-          name: Update version name
-          command: ./gradlew updateVersionName
-      - run:
-          name: Generate certified apk
-          command: source ci/scripts/app_certification.sh
-      - run:
-          name: Deploy Production
-          command: source ci/scripts/deploy_production.sh
-      - run:
-          name: Create changelog, github release and push
-          command: source ci/scripts/release.sh
-
-  documentation:
-    <<: *android_config
-    steps:
-      - checkout
-      - *update_licenses
-      - *validate_running
-      - *restore_gradle_cache
-      - *ruby_dependencies
-      - *android_dependencies
-      - *save_gradle_cache
-      - run:
-          name: Setup environment
-          command: source ci/scripts/setup_environment.sh
-      - run:
-          name: Generate Documentation
-          command: source ci/scripts/create_documentation.sh
-
-
+          name: Run Tests
+          command: ./gradlew clean build uiAutomationTest -x test -x signArchives
+      # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
