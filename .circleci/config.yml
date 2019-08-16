@@ -44,7 +44,7 @@ jobs:
             TERM: dumb
 
       - checkout
-      - run : ls /opt/android-sdk-linux/tools/bin/
+      - run : ls /opt/android-sdk-linux/tools/bin/avdmanager/
       - run:
           name: Wait for emulator
           command: /opt/android-sdk-linux/tools/bin/android-wait-for-boot.sh
