@@ -7,13 +7,17 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
+import io.appium.java_client.remote.AppiumCommandExecutor;
+import org.testng.annotations.*;
+import org.testng.annotations.Test;
 
 
 
 public class MobileTest {
 	
 	public static  AndroidDriver<MobileElement> driver;
-
+	
+		@Test
 		public static void main(String[] args) throws MalformedURLException {
 		
 			    DesiredCapabilities capabilities = new DesiredCapabilities();
