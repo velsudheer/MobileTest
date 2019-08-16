@@ -47,7 +47,7 @@ jobs:
       - run : ls ~/workspace
       - run:
           name: Wait for emulator
-          command: ./android-wait-for-boot.sh
+          command: /opt/android-sdk/android-wait-for-boot.sh
           environment:
             TERM: dumb
 
