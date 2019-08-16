@@ -6,6 +6,7 @@ jobs:
     docker:
       # specific environment version to avoid incompatible updates
       - image: bitriseio/docker-android:v2017_09_09-06_45-b744
+      - image: circleci/node:4.8.2
 
     working_directory: ~/workspace
 
@@ -44,29 +45,16 @@ jobs:
             TERM: dumb
 
       - checkout
-      #- run : ls /opt/android-sdk-linux/tools/bin/
-      #- run : find /opt/android-sdk-linux/ -name "*.sh"
-      #- run : emulator -list-avds
-      #- run:
-       #   name: Wait for emulator
-        #  command: /opt/android-sdk-linux/tools/bin/android-wait-for-boot.sh
-         # environment:
-          #  TERM: dumb
-
-      - run:
-          name: Remove lock screen
-          command: adb shell input keyevent 82
-          environment:
-            TERM: dumb
-
-      - run:
-          name: Unit testing
-          command: ./gradlew test
-          environment:
-            TERM: dumb
-
-      - run:
-          name: Instrumentation testing
-          command: ./gradlew connectedCheck
-          environment:
-            TERM: dumb
+     - run:
+      name: Install node 
+      command: |
+             curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+             sudo apt-get install -y nodejs
+             sudo apt-get install -y build-essential
+             sudo apt-get install build-essential curl git m4 python-setuptools ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
+  - run:
+      name: Install appium server
+      command: |
+        sudo npm update -g
+        sudo npm install appium
+        sudo npm install wd
