@@ -63,3 +63,6 @@ jobs:
           name: Start appium server
           command: appium &
           background: true
+    
+    - run: java -cp "/home/circleci/workspace/bin/eclipse.jar:/home/circleci/workspace/bin/beanshell.bsh.b6.jar:snakeyaml.jar::/home/circleci/workspace/bin/testng-6.14.3.jar:/home/circleci/workspace/bin/jcommander-1.7.jar:/home/circleci/workspace/bin/bin/" org.testng.TestNG testng.xml
+    
