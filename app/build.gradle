@@ -1,0 +1,14 @@
+apply plugin: 'com.android.application'
+
+android { ... }
+
+dependencies {
+    // Dependency on a local library module
+    implementation project(":mylibrary")
+
+    // Dependency on local binaries
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Dependency on a remote binary
+    implementation 'com.example.android:app-magic:12.3'
+}
