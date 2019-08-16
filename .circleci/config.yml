@@ -12,14 +12,12 @@ jobs:
     working_directory: ~/workspace
 
     steps:
-
-      - run:
+    - run: 
           name: Lists installed targets
           command: android list target
           environment:
             TERM: dumb
-
-      - run: 
+    - run: 
           name: List available targets and other sdk modules
           command: sdkmanager --list --include_obsolete --verbose
           environment:
@@ -53,13 +51,15 @@ jobs:
              sudo apt-get install -y nodejs
              sudo apt-get install -y build-essential
              sudo apt-get install build-essential curl git m4 python-setuptools ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
+      
       - run: 
           name: Install appium server
           command: |
                     sudo npm update -g
                     sudo npm install appium
                     sudo npm install wd
-       - run: 
+       
+      - run: 
           name: Start appium server
           command: appium &
           background: true
