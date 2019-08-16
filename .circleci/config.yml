@@ -68,5 +68,5 @@ jobs:
           command: appium &
           background: true
     - run: pwd
-    - run: java -cp "/lib/eclipse.jar:/lib/beanshell.bsh.b6.jar:/lib/snakeyaml.jar:/lib/selenium-server-standalone-3.141.59.jar:/lib/testng-6.14.3.jar:/lib/jcommander-1.7.jar:/lib/bin/" org.testng.TestNG testng.xml
+    - run: java -cp "/root/workspace/lib/eclipse.jar:/root/workspace/lib/beanshell.bsh.b6.jar:/root/workspace/lib/snakeyaml.jar:/root/workspace/lib/selenium-server-standalone-3.141.59.jar:/root/workspace/lib/testng-6.14.3.jar:/root/workspace/lib/jcommander-1.7.jar:/root/workspace/lib/bin/" org.testng.TestNG testng.xml
     
