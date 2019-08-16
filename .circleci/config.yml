@@ -34,8 +34,7 @@ jobs:
       - run: gradle dependencies
 
       - save_cache:
-          paths:
-            - ~/.gradle
+          paths: - ~/.gradle
       	  key: v1-dependencies-{{ checksum "build.gradle" }}
       - run:
           name: Lists installed targets
