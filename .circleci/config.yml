@@ -28,23 +28,22 @@ jobs:
       #    command: sdkmanager "system-images;android-23;google_apis;armeabi-v7a"
       #    environment:
       #      TERM: dumb
-
-      - run:
+    - run:
           name: Create avd
        #   command: echo no | avdmanager create avd -n testEmulator -k "system-images;android-23;google_apis;armeabi-v7a"
           command: echo no | avdmanager create avd -n testEmulator -k "system-images;android-24;default;armeabi-v7a"
           environment:
             TERM: dumb
 
-      - run:
+    - run:
           name: Start emulator
           command: /opt/android-sdk-linux/emulator/emulator -avd testEmulator -no-audio -no-window
           background: true
           environment:
             TERM: dumb
 
-      - checkout
-      - run: 
+    - checkout
+    - run: 
         name: Install node 
         command: |
              curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
@@ -52,14 +51,14 @@ jobs:
              sudo apt-get install -y build-essential
              sudo apt-get install build-essential curl git m4 python-setuptools ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
       
-      - run: 
+    - run: 
           name: Install appium server
           command: |
                     sudo npm update -g
                     sudo npm install appium
                     sudo npm install wd
        
-      - run: 
+    - run: 
           name: Start appium server
           command: appium &
           background: true
