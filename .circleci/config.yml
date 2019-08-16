@@ -68,5 +68,5 @@ jobs:
           command: appium &
           background: true
     
-    - run: java -cp "lib/eclipse.jar:lib/beanshell.bsh.b6.jar:lib/snakeyaml.jar::lib/testng-6.14.3.jar:lib/jcommander-1.7.jar:bin/" org.testng.TestNG testng.xml
+    - run: java -cp "lib/*.jar:bin/" org.testng.TestNG testng.xml
     
