@@ -24,9 +24,9 @@ public class MobileTest {
 	        //capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION,"7.1.1");
 	        capabilities.setCapability(MobileCapabilityType.PLATFORM_VERSION,"7.0");
 	        //capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,"Nexus 5 API 25");
-	        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,"Nexus 6 API 24");
+	        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,"testEmulator");
 	        
-	        capabilities.setCapability("app", "E:\\Java\\motilaltest.apk");
+	        capabilities.setCapability("app", "/root/workspace/motilaltest.apk");
 	        driver = new AndroidDriver<MobileElement>(new URL("http://localhost:4723/wd/hub"), capabilities);
 	        
 	  }
