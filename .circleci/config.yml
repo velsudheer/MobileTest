@@ -1,95 +1,42 @@
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
 version: 2
 jobs:
   build:
     docker:
-      - image: circleci/android:api-28-alpha
-        working_directory: ~/repo
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
     environment:
+      # Customize the JVM maximum heap limit
       JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
     steps:
-     - checkout
+      - checkout
 
-# restore saved caches
-- restore_cache:
-    keys:
-      - gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-  
-- restore_cache:
-    keys:
-      # for multi-project builds where dependencies are not defined in one central file,
-      # an additional run step before is necessary that concatenates affected files
-      # into one file that can be checksummed
-      - gradle-cache-{{ checksum "build.gradle" }}
-      - gradle-cache
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
-- restore_cache:
-    keys:
-      - gradle-build-caches-{{ .Revision }}
-      - gradle-build-caches
+      - run: gradle dependencies
 
-- run:
-    name: Restoring Gradle Build Caches
-    command: |
-      [ -d ~/gradle-build-caches ] &&
-        [ -n "$(ls -A ~/gradle-build-caches)" ] &&
-        rm -rf ~/.gradle/caches/build-cache-* &&
-        mv ~/gradle-build-caches/* ~/.gradle/caches/ || true
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
 
-# download and cache dependencies and Gradle
-- run:
-    name: Downloading Dependencies
-    command: ./gradlew --max-workers 2 downloadDependencies
-
-- save_cache:
-    paths:
-      - ~/.gradle/wrapper/
-    key: gradle-wrapper-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
-
-- save_cache:
-    paths:
-      - ~/.gradle/caches/
-    key: gradle-cache-{{ checksum "build.gradle" }}
-
-# build everything needed for publication
-- run:
-    name: Building Project
-    command: ./gradlew --max-workers 2 --continue build
-
-# cache gradle build caches
-- run:
-    name: Collecting Gradle Build Caches
-    command: |
-      mkdir -p ~/gradle-build-caches
-      [ -d ~/.gradle/caches ] &&
-        [ -n "$(ls -Ad ~/.gradle/caches/build-cache-* 2>/dev/null)" ] &&
-        mv ~/.gradle/caches/build-cache-* ~/gradle-build-caches || true
-    when: always
-
-- save_cache:
-    paths:
-      - ~/gradle-build-caches
-    key: gradle-build-caches-{{ .Revision }}
-    when: always
-      - run:
-          name: Lists installed targets
-          command: android list target
-          environment:
-          TERM: dumb
-      - run:
-          name: Show list of system-images
-          command: sdkmanager --list --verbose | grep system-images
-      - run:
-          name: Setup Emulator
-          command: sdkmanager "system-images;android-21;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-21;default;armeabi-v7a"
-      - run:
-          name: Launch Emulator
-          command: |
-                  cd ${ANDROID_HOME}/emulator;ls
-                  export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib
-                  emulator -avd test -no-window -noaudio -no-boot-anim -no-window -accel on
-          background: true
-      - run:
-          name: Wait emulator
-          command: |
-              circle-android wait-for-boot
-              adb shell input keyevent 82
+      # run tests!
+      # - run: gradle test
