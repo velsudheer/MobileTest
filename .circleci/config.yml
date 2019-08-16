@@ -14,7 +14,7 @@ jobs:
       
       - run:
          name: Chmod permissions
-         command: git update-index --chmod=+x gradlew
+         command: git update-index --chmod=+x /home/circleci/repo/gradlew
       - run:
           name: Download Dependencies
           command: ~/repo/gradlew androidDependencies
