@@ -68,5 +68,5 @@ jobs:
           command: appium &
           background: true
     
-    - run: java -cp "lib/*.jar:bin/" org.testng.TestNG testng.xml
+    - run: java -cp "/home/workspace/lib/*.jar:/home/workspace/bin/" org.testng.TestNG testng.xml
     
