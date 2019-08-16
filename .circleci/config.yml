@@ -1,28 +1,56 @@
-version: 2
-jobs:
-  build:
-    working_directory: ~/repo
-    docker:
-      - image: bitriseio/docker-android:v2017_09_09-06_45-b744
+# Build configuration for Circle CI
+# Adapted from https://gist.github.com/sahildave/81bc44a898be76c42aa67630b59c9c1e
+# and https://gist.github.com/mugifly/d83a3b94543200213df337c5e5083d22
 
-    working_directory: ~/repo
-    environment:
-      JVM_OPTS: -Xmx3200m
+general:
+    artifacts:
+        - /home/ubuntu/gradle-flavored-library-example/app/build/outputs/apk/
     
-    steps:
-      - checkout
-      - run:
-            name: Setup emulator
-            command: sdkmanager "system-images;android-16;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-16;default;armeabi-v7a"
-        - run:
-            name: Launch emulator
-            command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && emulator64-arm -avd test -noaudio -no-boot-anim -no-window -accel on
-            background: true
-        - run:
-            name: Wait emulator
-            command: |
-              # wait for it to have booted
-              circle-android wait-for-boot
-              # unlock the emulator screen
-              sleep 30
-              adb shell input keyevent 82
+machine:
+    environment:
+        ANDROID_HOME: /usr/local/android-sdk-linux
+        # Java options https://gist.github.com/mugifly/d83a3b94543200213df337c5e5083d22
+        JAVA_OPTS: "-Xms512m -Xmx4608m"
+    java:
+        version: oraclejdk8
+
+dependencies:
+    pre:
+        - echo y | android update sdk --no-ui --all --filter tools,platform-tools,extra-google-m2repository,extra-android-m2repository,extra-google-google_play_services,extra-android-support,android-24
+        - echo y | android update sdk --no-ui --all --filter build-tools-24.0.1
+        # download ABI for android 24 emulator
+        # NOTE: CircleCI currently doesn't support KVM, which would make the
+        #       emulator way faster and with more features. For that reason, I'm
+        #       using sys-img-armeabi-v7a-android-24, if they implement KVM in a near
+        #       future, we should change this to sys-img-x86-android-24
+        - echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-24
+        # generate our android img
+        # NOTE: Same case here, I'm using armeabi-v7a, but if possible go for x86
+        - echo n | android create avd --name myandroid24 -t "android-24" --abi armeabi-v7a
+        - wget "https://services.gradle.org/distributions/gradle-2.14.1-bin.zip"; unzip gradle-2.14.1-bin.zip
+        - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
+
+    cache_directories:
+        - /usr/local/android-sdk-linux/platforms/android-24
+        - /usr/local/android-sdk-linux/build-tools/24.0.1
+        - /usr/local/android-sdk-linux/tools
+        - /usr/local/android-sdk-linux/extras/android/m2repository
+
+test:
+    override:
+        # unit tests
+        - (./gradlew clean testDebug -Pcom.android.assembleDebug.threadPoolSize=1 -Dorg.gradle.daemon=false):
+            timeout: 600
+        # start emulator
+        - emulator -avd myandroid24 -no-audio -no-window
+        - circle-android wait-for-boot
+        # this is not the greatest solution, but it seemed like the only one
+        - sleep 30
+        # unlock the emulator screen
+        - adb shell input keyevent 82
+        # connects and run android debug tests
+        - ./gradlew clean connectedDebugAndroidTest -Pcom.android.assembleDebug.threadPoolSize=1 -Dorg.gradle.daemon=false
+        # copy build outputs to artifacts
+        - cp -r app/build/ouputs $CIRCLE_ARTIFACTS
+        # copy the test results to the android tests results dir
+        - cp -r app/build/outputs/androidTest-results/* $CIRCLE_TEST_REPORTS
