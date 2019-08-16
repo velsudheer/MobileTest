@@ -5,8 +5,8 @@ jobs:
   build:
     docker:
       # specific environment version to avoid incompatible updates
-      - image: bitriseio/docker-android:v2017_09_09-06_45-b744
-    docker:
+      #- image: bitriseio/docker-android:v2017_09_09-06_45-b744
+    #docker:
       - image: circleci/node:4.8.2
 
     working_directory: ~/workspace
@@ -59,3 +59,7 @@ jobs:
                     sudo npm update -g
                     sudo npm install appium
                     sudo npm install wd
+       - run:
+          name: Start appium server
+          command: appium &
+          background: true
