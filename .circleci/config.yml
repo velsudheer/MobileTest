@@ -36,8 +36,8 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
-		- run:
+      	  key: v1-dependencies-{{ checksum "build.gradle" }}
+      - run:
           name: Lists installed targets
           command: android list target
           environment:
