@@ -47,7 +47,7 @@ jobs:
       - run : ls /opt/
       - run:
           name: Wait for emulator
-          command: /opt/android-sdk/android-wait-for-boot.sh
+          command: /opt/android-sdk-linux/android-wait-for-boot.sh
           environment:
             TERM: dumb
 
