@@ -51,7 +51,7 @@ jobs:
       
       - run: 
           name: Install appium server
-          command:  sudo npm install appium
+          command:  sudo apt-get install -y appium
                    
       - run: 
           name: Start appium server
