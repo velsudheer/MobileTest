@@ -38,6 +38,7 @@ jobs:
             sleep 30
             adb shell input keyevent 82
           background: true
+      
       - run: 
         name: Install node 
         command: |
