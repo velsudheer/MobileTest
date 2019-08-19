@@ -12,9 +12,15 @@ jobs:
       
     steps:
       - checkout
+      - run: 
+          name: List available targets and other sdk modules
+          command: sdkmanager --list --include_obsolete --verbose
+          environment:
+            TERM: dumb
+            
       - run:
           name: Setup emulator
-          command: sdkmanager "system-images;android-25;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-25;default;armeabi-v7a" 
+          command: sdkmanager "system-images;android-17;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-17;default;armeabi-v7a" 
       
       - run:
           name: Launch emulator
