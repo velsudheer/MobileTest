@@ -17,10 +17,13 @@ jobs:
           command: sdkmanager --list --include_obsolete --verbose
           environment:
             TERM: dumb
+      - run:
+          name: Accept Licences
+          command: yes | sdkmanager --licenses && yes | sdkmanager --update
             
       - run:
           name: Setup emulator
-          command: yes | sdkmanager --licenses && yes | sdkmanager --update | sdkmanager "system-images;android-17;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-17;default;armeabi-v7a" && echo "no"
+          command: sdkmanager "system-images;android-17;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-17;default;armeabi-v7a" && echo "no"
       
       - run:
           name: Launch emulator
