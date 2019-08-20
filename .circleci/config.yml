@@ -48,13 +48,13 @@ jobs:
           name: Install appium server
           command: |
              npm update
-             npm install appium@1.14.0
+             npm install appium@1.6.3
              npm install wd
       - run:
           name: Start appium server
           command: appium -a 127.0.0.1 -p 4723 &
           background: true
-      - run: google-chrome --version
+      #- run: google-chrome --version
       - run:
           name: Run TestNG Tests
           command: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
