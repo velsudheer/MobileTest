@@ -56,7 +56,6 @@ jobs:
           background: true
       - run: android list target
       - run: android list avd
-      - run: android list sdk --all
       - run:
           name: Run TestNG Tests
           command: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
