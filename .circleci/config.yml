@@ -6,7 +6,7 @@ jobs:
     docker:
       # Android the primary container
       - image: reactnativecommunity/react-native-android:2019-5-29
-      - image: image: circleci/classic:201708-01
+      - image: circleci/classic:201708-01
       
       
     environment:
