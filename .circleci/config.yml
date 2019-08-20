@@ -48,13 +48,13 @@ jobs:
           name: Install appium server
           command: |
              npm update
-             npm install appium
+             npm install -g appium
              npm install wd
       - run:
           name: Start appium server
           command: appium &
           background: true
-      - run: appium
+      - run: appium -version
       - run:
           name: Run TestNG Tests
           command: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
