@@ -48,11 +48,11 @@ jobs:
           name: Install appium server
           command: |
              npm update
-             npm install -g appium
+             npm install appium
              npm install wd
       - run:
           name: Start appium server
-          command: appium &
+          command: appium & -a 127.0.0.1 -p 4723
           background: true
       - run: appium -version
       - run:
