@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/repo
     docker:
       # Android the primary container
-      - image: circleci/circleci:api-26-node8-alpha
+      - image: circleci/circleci:api-26-ndk
       - image: circleci/openjdk:8-jdk
       
     environment:
