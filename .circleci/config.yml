@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/repo
     docker:
       # Android the primary container
-      - image: bitriseio/docker-android:v2017_09_09-06_45-b744
+      - image: bitriseio/circleci:api-25-node8-alpha
       - image: circleci/openjdk:8-jdk
       
     environment:
