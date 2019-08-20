@@ -54,7 +54,7 @@ jobs:
           name: Start appium server
           command: appium &
           background: true
-          
+      - run: android list targets    
       - run:
           name: Run TestNG Tests
           command: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
