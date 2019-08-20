@@ -38,7 +38,7 @@ jobs:
             # wait for it to have booted
             adb wait-for-device
             # unlock the emulator screen
-            sleep 60000
+            sleep 60
             adb shell input keyevent 82
           #background: true
       - run: adb devices
