@@ -66,7 +66,7 @@ jobs:
        
     - run: 
           name: Start appium server
-          command: appium &
+          command: appium
           background: true
     - run: chmod +777 /root/workspace/bin
     #- run: java -cp "/root/workspace/lib*:/root/workspace/bin/" org.testng.TestNG testng.xml
