@@ -6,6 +6,8 @@ jobs:
     docker:
       # Android the primary container
       - image: reactnativecommunity/react-native-android:2019-5-29
+      - image: bitriseio/docker-android:v2017_09_09-06_45-b744
+      
       
     environment:
       JVM_OPTS: -Xmx3200m
@@ -45,9 +47,9 @@ jobs:
       - run:
           name: Install appium server
           command: |
-             apt-get install npm update -g
-             apt-get install npm install appium
-             apt-get install npm install wd
+             sudo npm update -g
+             sudo npm install appium
+             sudo npm install wd
       - run:
           name: Start appium server
           command: appium &
