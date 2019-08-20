@@ -26,9 +26,9 @@ jobs:
       - run: yes | sdkmanager --update || exit 0
       - run:
           name: Setup emulator
-          command: sdkmanager "system-images;android-17;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-17;default;armeabi-v7a" && echo "no"
+          command: sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a" && echo "no"
       #- run: cd /opt/android/sdk/emulator/ ; ls
-      
+      #- run: android update sdk --no-ui
       - run:
           name: Launch emulator
           command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-boot-anim -no-window -accel auto -verbose
@@ -43,7 +43,7 @@ jobs:
             sleep 60
             adb shell input keyevent 82
           #background: true
-      - run: adb devices
+      
       - run:
           name: Install appium server
           command: |
