@@ -54,7 +54,8 @@ jobs:
           name: Start appium server
           command: appium &
           background: true
-      - run: android list targets
+      - run: android list target
+      - run: android list avd
       - run: android list sdk --all
       - run:
           name: Run TestNG Tests
