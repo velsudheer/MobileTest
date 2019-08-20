@@ -1,63 +1,74 @@
+# CircleCi configuration version
 version: 2
 
 jobs:
   build:
-    working_directory: ~/repo
     docker:
-      # Android the primary container
+      # specific environment version to avoid incompatible updates
       - image: bitriseio/docker-android:v2017_09_09-06_45-b744
-      #- image: circleci/node:9.11.1
-      
+    #docker:
+      - image: circleci/node:4.8.2
+      - image: circleci/openjdk:8-jdk
+
+    working_directory: ~/workspace
+    
     environment:
-      JVM_OPTS: -Xmx3200m
-      
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+    
     steps:
-      - checkout
-      # Use BASH instead of DASH! see: https://ubuntuforums.org/showthread.php?t=1932504
-      - run: apt-get install -y sudo
-      - run: ls -al /bin/sh && sudo rm /bin/sh && sudo ln -s /bin/bash /bin/sh && ls -al /bin/sh
-      
-      - run: 
+    - run: 
+          name: Lists installed targets
+          command: android list target
+          environment:
+            TERM: dumb
+    - run: 
           name: List available targets and other sdk modules
           command: sdkmanager --list --include_obsolete --verbose
           environment:
             TERM: dumb
-      - run: yes | sdkmanager --licenses || exit 0
-      - run: yes | sdkmanager --update || exit 0
-      - run:
-          name: Setup emulator
-          command: sdkmanager "system-images;android-17;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-17;default;armeabi-v7a" && echo "no"
-      #- run: cd /opt/android/sdk/emulator/ ; ls
-      
-      - run:
-          name: Launch emulator
-          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-boot-anim -no-window -accel auto -verbose
+
+      #- run:
+      #    name: Install custom system image
+      #    command: sdkmanager "system-images;android-23;google_apis;armeabi-v7a"
+      #    environment:
+      #      TERM: dumb
+    - run:
+          name: Create avd
+       #   command: echo no | avdmanager create avd -n testEmulator -k "system-images;android-23;google_apis;armeabi-v7a"
+          command: echo no | avdmanager create avd -n testEmulator -k "system-images;android-24;default;armeabi-v7a"
+          environment:
+            TERM: dumb
+
+    - run:
+          name: Start emulator
+          command: /opt/android-sdk-linux/emulator/emulator -avd testEmulator -no-audio -no-window
           background: true
+          environment:
+            TERM: dumb
+
+    - checkout
+    - run: 
+        name: Install node 
+        command: |
+             curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+             sudo apt-get install -y nodejs
+             sudo apt-get install -y build-essential
+             sudo apt-get install -y build-essential curl git m4 python-setuptools ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
+    - run: nodejs --version
       
-      - run:
-          name: Wait emulator
-          command: |
-            # wait for it to have booted
-            adb wait-for-device
-            # unlock the emulator screen
-            sleep 60
-            adb shell input keyevent 82
-          #background: true
-      - run: adb devices
-      - run:
+    - run: 
           name: Install appium server
           command: |
-             sudo npm update -g
-             sudo npm install appium
-             sudo npm install wd
-      - run:
+                    sudo npm update -g
+                    sudo npm install appium
+                    sudo npm install wd
+       
+    - run: 
           name: Start appium server
           command: appium &
           background: true
-          
-      - run:
-          name: Run TestNG Tests
-          command: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
-          
-      - store_artifacts:
-          path:  test-output
+    - run: chmod +777 /root/workspace/bin
+    #- run: java -cp "/root/workspace/lib*:/root/workspace/bin/" org.testng.TestNG testng.xml
+    - run: java -cp "/root/workspace/lib/eclipse.jar:/root/workspace/lib/beanshell.bsh.b6.jar:/root/workspace/lib/snakeyaml.jar:/root/workspace/lib/selenium-server-standalone-3.141.59.jar:/root/workspace/lib/testng-6.14.3.jar:/root/workspace/lib/jcommander-1.7.jar:/root/workspace/bin/" org.testng.TestNG testng.xml
+   
