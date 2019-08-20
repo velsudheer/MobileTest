@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/repo
     docker:
       # Android the primary container
-      - image: circleci/circleci:api-26-ndk
+      - image: reactnativecommunity/react-native-android:2019-5-29
       - image: circleci/openjdk:8-jdk
       
     environment:
