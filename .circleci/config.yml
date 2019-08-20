@@ -6,7 +6,7 @@ jobs:
     docker:
       # Android the primary container
       - image: reactnativecommunity/react-native-android:2019-5-29
-      - image: circleci/openjdk:8-jdk
+      #- image: circleci/openjdk:8-jdk
       
     environment:
       JVM_OPTS: -Xmx3200m
@@ -52,9 +52,9 @@ jobs:
              npm install wd
       - run:
           name: Start appium server
-          command: appium & -a 127.0.0.1 -p 4723
+          command: appium -a 127.0.0.1 -p 4723
           background: true
-      #- run: appium -version
+      - run: appium -v
       - run:
           name: Run TestNG Tests
           command: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
