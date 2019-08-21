@@ -48,7 +48,7 @@ jobs:
 
     - run:
           name: Start emulator
-          command: ${ANDROID_HOME}/emulator/emulator -avd test -no-audio -no-window
+          command: ${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-boot-anim -no-window -verbose
           background: true
           environment:
             TERM: dumb
