@@ -7,7 +7,7 @@ jobs:
       # specific environment version to avoid incompatible updates
       - image: circleci/android:api-24-ndk
     #docker:
-      - image: circleci/node:4.8.2
+      #- image: circleci/node:4.8.2
       - image: circleci/openjdk:8-jdk
 
     working_directory: ~/workspace
@@ -46,7 +46,7 @@ jobs:
 
     - run:
           name: Start emulator
-          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-boot-anim -no-window -verbose
+          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-audio -no-boot-anim -no-window -verbose
           background: true
           environment:
             TERM: dumb
