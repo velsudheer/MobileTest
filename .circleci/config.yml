@@ -30,6 +30,7 @@ jobs:
     
     - run: yes | sdkmanager --licenses || exit 0
     - run: yes | sdkmanager --update || exit 0
+    - run: sudo apt-get install libpulse0:i386
     
       #- run:
       #    name: Install custom system image
