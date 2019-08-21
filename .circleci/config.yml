@@ -18,7 +18,7 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
     
     steps:
-    - run: cd /lib/x86_64-linux-gnu/; ls; sudo ln -sf libudev.so.1 libudev.so.0; ls
+    - run: sudo ln -sf /lib/$(arch)-linux-gnu/libudev.so.1 /lib/$(arch)-linux-gnu/libudev.so.0
     - run: 
           name: Lists installed targets
           command: android list target
