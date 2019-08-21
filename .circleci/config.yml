@@ -18,7 +18,7 @@ jobs:
     
     steps:
 
-    - run: find /home | grep libpulse.so.0
+    - run: cd /opt/android/sdk/emulator/qemu/linux-x86_64/; ls
     - run: 
           name: Lists installed targets
           command: android list target
