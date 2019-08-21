@@ -5,7 +5,7 @@ jobs:
   build:
     docker:
       # specific environment version to avoid incompatible updates
-      - image: circleci/android:api-24-ndk
+      - image: circleci/android:api-29-ndk
       #- image: reactnativecommunity/react-native-android:2019-5-29
     #docker:
       #- image: circleci/node:9.9.0
