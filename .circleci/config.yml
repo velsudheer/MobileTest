@@ -46,7 +46,7 @@ jobs:
           command: sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a" && echo "no"
           environment:
             TERM: dumb
-    - run: cd /opt/android/sdk/emulator/; ls   
+    - run: cd /opt/android/sdk/emulator/qemu/linux-x86_64/; ls   
     - run:
           name: Start emulator
           command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-boot-anim -no-window -verbose
