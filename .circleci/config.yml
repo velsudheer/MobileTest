@@ -44,7 +44,7 @@ jobs:
             adb shell input keyevent 82
           #background: true
           no_output_timeout: 15m
-      
+      - run: avdmanager -v
       - run:
           name: Install appium server
           command: |
@@ -55,6 +55,7 @@ jobs:
           name: Start appium server
           command: appium -a 127.0.0.1 -p 4723 &
           #background: true
+          no_output_timeout: 1m
       #- run: google-chrome --version
       - run:
           name: Run TestNG Tests
