@@ -18,7 +18,7 @@ jobs:
     
     steps:
 
-    - run: cd /opt/android/sdk/emulator/qemu/linux-x86_64/; ls
+    - run: cd /opt/android/sdk/emulator/qemu/linux-x86_64/qemu-system-armel/; ls
     - run: 
           name: Lists installed targets
           command: android list target
