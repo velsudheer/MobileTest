@@ -18,7 +18,7 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
     
     steps:
-    - run: sudo apt-get install libc6-dev-i386 lib32z1
+    - run: cd /opt/android/sdk/emulator/; ls
     - run: 
           name: Lists installed targets
           command: android list target
