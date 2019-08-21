@@ -46,7 +46,7 @@ jobs:
 
     - run:
           name: Start emulator
-          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-audio -no-boot-anim -no-window -verbose
+          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-audio -no-window
           background: true
           environment:
             TERM: dumb
