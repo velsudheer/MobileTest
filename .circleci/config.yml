@@ -49,7 +49,7 @@ jobs:
           name: Install appium server
           command: |
              npm update
-             npm install appium@1.11.0
+             npm install -g appium@1.11.0
              npm install wd
       - run:
           name: Start appium server
