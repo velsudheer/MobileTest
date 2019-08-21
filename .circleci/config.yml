@@ -18,7 +18,7 @@ jobs:
     
     steps:
 
-    - run: sudo apt install pulseaudio-equalizer
+    - run: pulseaudio
     - run: 
           name: Lists installed targets
           command: android list target
