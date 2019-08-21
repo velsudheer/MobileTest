@@ -18,10 +18,7 @@ jobs:
     
     
     steps:
-    - run: cd /opt \&& wget -q https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip -O android-sdk-tools.zip \&& unzip -q android-sdk-tools.zip -d ${ANDROID_HOME} \
-    && rm android-sdk-tools.zip
-    - run: ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
-
+    
     - run: 
           name: Lists installed targets
           command: android list target
@@ -35,6 +32,8 @@ jobs:
     - run: java -version
     - run: yes | sdkmanager --licenses || exit 0
     - run: yes | sdkmanager --update || exit 0
+    - run: echo y | android update sdk --no-ui --all --filter “android-24”
+    
     #- run: sudo apt-get install pulseaudio
     
       #- run:
