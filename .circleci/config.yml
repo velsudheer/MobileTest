@@ -5,8 +5,8 @@ jobs:
   build:
     docker:
       # specific environment version to avoid incompatible updates
-      #- image: circleci/android:api-24-ndk
-      - image: reactnativecommunity/react-native-android:2019-5-29
+      - image: circleci/android:api-24-ndk
+      #- image: reactnativecommunity/react-native-android:2019-5-29
     #docker:
       #- image: circleci/node:9.9.0
       #- image: circleci/openjdk:8-jdk
@@ -48,7 +48,7 @@ jobs:
 
     - run:
           name: Start emulator
-          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-audio -no-window
+          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-audio -no-window
           background: true
           environment:
             TERM: dumb
