@@ -18,8 +18,10 @@ jobs:
     
     steps:
 
+    - run: pushd ${ANDROID_HOME}/tools
+    - run: emulator -avd ${EMULATOR_NAME} -wipe-data&
+    - run: popd
     - run: echo y | android update sdk --no-ui --all --filter "tools"
-    
     - run: 
           name: Lists installed targets
           command: android list target
