@@ -43,6 +43,7 @@ jobs:
             sleep 320
             adb shell input keyevent 82
           #background: true
+          no_output_timeout: 15m
       
       - run:
           name: Install appium server
