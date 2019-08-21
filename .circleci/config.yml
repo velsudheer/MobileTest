@@ -8,7 +8,7 @@ jobs:
       - image: circleci/android:api-24-ndk
     #docker:
       #- image: circleci/node:4.8.2
-      - image: circleci/openjdk:8-jdk
+      #- image: circleci/openjdk:8-jdk
 
     working_directory: ~/workspace
     
@@ -27,7 +27,7 @@ jobs:
           command: sdkmanager --list --include_obsolete --verbose
           environment:
             TERM: dumb
-    
+    - run: java -version
     - run: yes | sdkmanager --licenses || exit 0
     - run: yes | sdkmanager --update || exit 0
     - run: sudo apt-get install libqt5widgets5
