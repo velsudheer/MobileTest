@@ -51,6 +51,8 @@ jobs:
              npm update
              npm install -g appium@1.11.0
              npm install wd
+             npm install -g appium-doctor
+      - run: appium-doctor       
       - run:
           name: Start appium server
           command: appium -a 127.0.0.1 -p 4723 &
