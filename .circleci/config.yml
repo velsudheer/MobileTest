@@ -17,11 +17,11 @@ jobs:
       MAVEN_OPTS: -Xmx3200m
     
     steps:
-    
-    dependencies:
+
+dependencies:
     pre:
-     - run: echo y | android update sdk --no-ui --all --filter "tools"
-     - run: echo y | android update sdk --no-ui --all --filter "build-tools-23.0.2"
+      - run: echo y | android update sdk --no-ui --all --filter "tools"
+      - run: echo y | android update sdk --no-ui --all --filter "build-tools-23.0.2"
     
     - run: 
           name: Lists installed targets
