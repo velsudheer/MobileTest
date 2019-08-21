@@ -54,9 +54,8 @@ jobs:
       - run:
           name: Start appium server
           command: appium -a 127.0.0.1 -p 4723 &
-          background: true
+          #background: true
       #- run: google-chrome --version
-      - run: -help
       - run:
           name: Run TestNG Tests
           command: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
