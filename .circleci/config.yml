@@ -18,10 +18,7 @@ jobs:
     
     steps:
 
-dependencies:
-    pre:
-      - run: echo y | android update sdk --no-ui --all --filter "tools"
-      - run: echo y | android update sdk --no-ui --all --filter "build-tools-23.0.2"
+    - run: echo y | android update sdk --no-ui --all --filter "tools"
     
     - run: 
           name: Lists installed targets
