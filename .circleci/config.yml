@@ -15,7 +15,10 @@ jobs:
     environment:
       # Customize the JVM maximum heap limit
       MAVEN_OPTS: -Xmx3200m
-    
+    dependencies:
+    pre:
+     - run: echo y | android update sdk --no-ui --all --filter "tools"
+     - run: echo y | android update sdk --no-ui --all --filter "build-tools-23.0.2"
     
     steps:
     
@@ -32,7 +35,6 @@ jobs:
     - run: java -version
     - run: yes | sdkmanager --licenses || exit 0
     - run: yes | sdkmanager --update || exit 0
-    - run: echo y | android update sdk --no-ui --all --filter “android-24”
     
     #- run: sudo apt-get install pulseaudio
     
