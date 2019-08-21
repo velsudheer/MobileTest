@@ -7,7 +7,7 @@ jobs:
       # Android the primary container
       - image: reactnativecommunity/react-native-android:2019-5-29
       - image: circleci/openjdk:8-jdk
-      - image: circleci/node:9.9-stretch
+      #- image: circleci/node:9.9-stretch
       
     environment:
       JVM_OPTS: -Xmx3200m
@@ -49,11 +49,11 @@ jobs:
       - run:
           name: Install appium server
           command: |
-             npm update
-             npm install appium@1.11.0
-             npm install wd
-             npm install appium-doctor
-      - run: appium-doctor       
+             sudo update
+             sudo install appium@1.11.0
+             sudo install wd
+             sudo install appium-doctor
+      #- run: appium-doctor       
       - run:
           name: Start appium server
           command: appium -a 127.0.0.1 -p 4723 &
