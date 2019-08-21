@@ -18,9 +18,9 @@ jobs:
       # Use BASH instead of DASH! see: https://ubuntuforums.org/showthread.php?t=1932504
       #- run: apt-get install -y sudo
       #- run: ls -al /bin/sh && sudo rm /bin/sh && sudo ln -s /bin/bash /bin/sh && ls -al /bin/sh
-      - run: export PATH=”$HOME/.linuxbrew/bin:$PATH”; export MANPATH=”$HOME/.linuxbrew/share/man:$MANPATH”; export INFOPATH=”$HOME/.linuxbrew/share/info:$INFOPATH”
-      - run: sudo apt-get install build-essential curl git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
-      - run: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+      #- run: export PATH=”$HOME/.linuxbrew/bin:$PATH”; export MANPATH=”$HOME/.linuxbrew/share/man:$MANPATH”; export INFOPATH=”$HOME/.linuxbrew/share/info:$INFOPATH”
+      #- run: sudo apt-get install build-essential curl git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
+      #- run: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
       - run: 
           name: List available targets and other sdk modules
           command: sdkmanager --list --include_obsolete --verbose
