@@ -7,7 +7,7 @@ jobs:
       # specific environment version to avoid incompatible updates
       - image: circleci/android:api-29-ndk
     #docker:
-      - image: circleci/node:6.1.0
+      - image: circleci/node:9.9.0
       #- image: circleci/openjdk:8-jdk
 
     working_directory: ~/workspace
