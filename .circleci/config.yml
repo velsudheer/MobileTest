@@ -26,7 +26,7 @@ jobs:
       - run: yes | sdkmanager --update || exit 0
       - run:
           name: Setup emulator
-          command: sdkmanager "system-images;android-21;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-21;default;armeabi-v7a" && echo "no"
+          command: sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a" && echo "no"
       #- run: cd /opt/android/sdk/emulator/ ; ls
       #- run: android update sdk --no-ui
       - run:
