@@ -7,7 +7,7 @@ jobs:
       # Android the primary container
       - image: reactnativecommunity/react-native-android:2019-5-29
       - image: circleci/openjdk:8-jdk
-      #- image: circleci/node:9.9-stretch
+      - image: circleci/ruby:2.7-rc
       
     environment:
       JVM_OPTS: -Xmx3200m
@@ -17,7 +17,7 @@ jobs:
       # Use BASH instead of DASH! see: https://ubuntuforums.org/showthread.php?t=1932504
       #- run: apt-get install -y sudo
       #- run: ls -al /bin/sh && sudo rm /bin/sh && sudo ln -s /bin/bash /bin/sh && ls -al /bin/sh
-      
+      - run: export PATH=”$HOME/.linuxbrew/bin:$PATH”; export MANPATH=”$HOME/.linuxbrew/share/man:$MANPATH”; export INFOPATH=”$HOME/.linuxbrew/share/info:$INFOPATH”
       - run: 
           name: List available targets and other sdk modules
           command: sdkmanager --list --include_obsolete --verbose
@@ -45,7 +45,7 @@ jobs:
             adb shell input keyevent 82
           #background: true
           no_output_timeout: 15m
-      #- run: avd list device
+      - run: abd 
       - run:
           name: Install appium server
           command: |
