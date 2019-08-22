@@ -33,7 +33,7 @@ jobs:
       #- run: cd /opt/android/sdk/emulator/ ; ls
       - run: sudo apt-get install apt-file
       - run: sudo apt-file update
-      - run: sudo apt-file find libstdc++.so.0
+      - run: sudo apt-file find libqt5widgets5
       #- run: libstdc++6: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
       - run: sudo apt-get install libstdc++0
       - run:
