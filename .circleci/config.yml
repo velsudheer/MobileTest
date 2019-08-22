@@ -5,8 +5,9 @@ jobs:
     working_directory: ~/repo
     docker:
       # Android the primary container
-      #- image: reactnativecommunity/react-native-android:latest
-      - image: circleci/openjdk:8-jdk
+      - image: thyrlian/android-sdk
+      - image: thyrlian/android-sdk-vnc
+      #- image: circleci/openjdk:8-jdk
       #- image: circleci/ruby:2.7-rc
       
     environment:
@@ -17,10 +18,50 @@ jobs:
       # Use BASH instead of DASH! see: https://ubuntuforums.org/showthread.php?t=1932504
       #- run: apt-get install -y sudo
       #- run: ls -al /bin/sh && sudo rm /bin/sh && sudo ln -s /bin/bash /bin/sh && ls -al /bin/sh
-      #- run: export PATH=”$HOME/.linuxbrew/bin:$PATH”; export MANPATH=”$HOME/.linuxbrew/share/man:$MANPATH”; export INFOPATH=”$HOME/.linuxbrew/share/info:$INFOPATH”
-      #- run: sudo apt-get install build-essential curl git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
-      #- run: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+      - run: export PATH=”$HOME/.linuxbrew/bin:$PATH”; export MANPATH=”$HOME/.linuxbrew/share/man:$MANPATH”; export INFOPATH=”$HOME/.linuxbrew/share/info:$INFOPATH”
+      - run: sudo apt-get install build-essential curl git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
+      - run: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+      - run: 
+          name: List available targets and other sdk modules
+          command: sdkmanager --list --include_obsolete --verbose
+          environment:
+            TERM: dumb
+      - run: yes | sdkmanager --licenses || exit 0
+      - run: yes | sdkmanager --update || exit 0
+      - run:
+          name: Setup emulator
+          command: sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a" && echo "no"
+      #- run: cd /opt/android/sdk/emulator/ ; ls
+      #- run: android update sdk --no-ui
+      - run:
+          name: Launch emulator
+          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-boot-anim -no-window -verbose
+          background: true
       
+      - run:
+          name: Wait emulator
+          command: |
+            # wait for it to have booted
+            adb wait-for-device
+            # unlock the emulator screen
+            sleep 320
+            adb shell input keyevent 82
+          #background: true
+          no_output_timeout: 15m
+      #- run: abd 
+      - run:
+          name: Install appium server
+          command: |
+             npm update
+             npm install appium@1.11.0
+             npm install wd
+             npm install appium-doctor
+      #- run: appium-doctor       
+      - run:
+          name: Start appium server
+          command: appium -a 127.0.0.1 -p 4723 &
+          #background: true
+          no_output_timeout: 1m
       #- run: google-chrome --version
       - run:
           name: Run TestNG Tests
