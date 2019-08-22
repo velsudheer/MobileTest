@@ -31,7 +31,7 @@ jobs:
           name: Setup emulator
           command: sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a" && echo "no"
       #- run: cd /opt/android/sdk/emulator/ ; ls
-      #- run: android update sdk --no-ui
+      - run: sudo apt-get install libpulse0:i386
       - run:
           name: Launch emulator
           command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-boot-anim -no-window -no-accel
