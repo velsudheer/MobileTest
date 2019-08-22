@@ -5,7 +5,8 @@ jobs:
     working_directory: ~/repo
     docker:
       # Android the primary container
-      - image: circleci/android:api-24-alpha
+      #- image: circleci/android:api-24-alpha
+      - image: library/ubuntu
       #- image: circleci/openjdk:8-jdk
       #- image: circleci/ruby:2.7-rc
       
@@ -20,6 +21,8 @@ jobs:
       #- run: export PATH=”$HOME/.linuxbrew/bin:$PATH”; export MANPATH=”$HOME/.linuxbrew/share/man:$MANPATH”; export INFOPATH=”$HOME/.linuxbrew/share/info:$INFOPATH”
       #- run: sudo apt-get install build-essential curl git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
       #- run: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
+      - run: find /home/jeep | grep libpulse.so.0
+      
       - run: 
           name: List available targets and other sdk modules
           command: sdkmanager --list --include_obsolete --verbose
@@ -31,11 +34,6 @@ jobs:
           name: Setup emulator
           command: sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a" && echo "no"
       #- run: cd /opt/android/sdk/emulator/ ; ls
-      - run: sudo apt-get install apt-file
-      - run: sudo apt-file update
-      - run: sudo apt-file find pulseaudio
-      #- run: libstdc++6: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-      - run: sudo /bin/start-pulseaudio-x11
       - run:
           name: Launch emulator
           command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-boot-anim -no-window -no-accel
