@@ -34,7 +34,7 @@ jobs:
       - run: sudo apt-get install apt-file
       - run: sudo apt-file update
       - run: sudo apt-file find libstdc++.so.6
-      - run: libstdc++6: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+      #- run: libstdc++6: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
       - run: sudo apt-get install libstdc++6
       - run:
           name: Launch emulator
