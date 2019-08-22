@@ -25,7 +25,7 @@ jobs:
       
       - run: 
           name: List available targets and other sdk modules
-          command: sdkmanager --list --include_obsolete --verbose
+          command: sudo sdkmanager --list --include_obsolete --verbose
           environment:
             TERM: dumb
       - run: yes | sdkmanager --licenses || exit 0
