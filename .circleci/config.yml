@@ -33,9 +33,9 @@ jobs:
       #- run: cd /opt/android/sdk/emulator/ ; ls
       - run: sudo apt-get install apt-file
       - run: sudo apt-file update
-      - run: sudo apt-file find libqt5widgets5
+      - run: sudo apt-file find libstdc++.so.1
       #- run: libstdc++6: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
-      - run: sudo apt-get install libstdc++0
+      - run: sudo apt-get install libstdc++.so.1
       - run:
           name: Launch emulator
           command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-boot-anim -no-window -no-accel
