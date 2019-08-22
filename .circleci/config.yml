@@ -5,7 +5,7 @@ jobs:
     working_directory: ~/repo
     docker:
       # Android the primary container
-      - image: circle/android:api-24-alpha
+      - image: circleci/android:api-24-alpha
       #- image: circleci/openjdk:8-jdk
       #- image: circleci/ruby:2.7-rc
       
