@@ -5,13 +5,13 @@ jobs:
     working_directory: ~/repo
     docker:
       # Android the primary container
-      #- image: library/ubuntu
-      #- image: circleci/openjdk:8-jdk-node
+      - image: library/ubuntu
+      - image: circleci/openjdk:8-jdk-node
       #- image: budtmo/docker-android-x86-5.0.1
       #- image: appium/appium:local
       #- image: circleci/ruby:2.7-rc
-      - image: circleci/ruby:2.4.1-node-browsers
-      - image: circleci/android:api-24
+      #- image: circleci/ruby:2.4.1-node-browsers
+      #- image: circleci/android:api-24
       
     environment:
       # Customize the JVM maximum heap limit
@@ -24,6 +24,5 @@ jobs:
        # Download and cache dependencies
 
       # Download dependencies
-      - run: gem install appium_lib
       - run: cd /repo/; ls
    
