@@ -8,7 +8,7 @@ jobs:
       #- image: library/ubuntu
       - image: circleci/openjdk:8-jdk
       - image: circleci/android:api-24-alpha
-      - image: "appium/appium:local" -f Appium/Dockerfile Appium
+      - image: appium/appium:local
       #- image: circleci/ruby:2.7-rc
       
     environment:
