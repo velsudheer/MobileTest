@@ -6,60 +6,59 @@ jobs:
     docker:
       # Android the primary container
       #- image: library/ubuntu
-      - image: circleci/openjdk:8-jdk
-      - image: circleci/android:api-24-alpha
-      - image: appium/appium:local
+      #- image: circleci/openjdk:8-jdk-node
+      #- image: budtmo/docker-android-x86-5.0.1
+      #- image: appium/appium:local
       #- image: circleci/ruby:2.7-rc
+      - image: circleci/openjdk:8-jdk
+      - image: circleci/node:4.8.2
       
     environment:
-      JVM_OPTS: -Xmx3200m
-      
-    steps:
-      - checkout
-      - run: 
-          name: List available targets and other sdk modules
-          command: sudo sdkmanager --list --include_obsolete --verbose
-          environment:
-            TERM: dumb
-      - run: yes | sdkmanager --licenses || exit 0
-      - run: yes | sdkmanager --update || exit 0
-      - run:
-          name: Setup emulator
-          command: sdkmanager "system-images;android-24;default;armeabi-v7a" && echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a" && echo "no"
-      #- run: cd /opt/android/sdk/emulator/ ; ls
-      - run:
-          name: Launch emulator
-          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib && ${ANDROID_HOME}/emulator/emulator -avd test -no-boot-anim -no-window -no-accel
-          background: true
-      
-      - run:
-          name: Wait emulator
-          command: |
-            # wait for it to have booted
-            adb wait-for-device
-            # unlock the emulator screen
-            sleep 320
-            adb shell input keyevent 82
-          #background: true
-          no_output_timeout: 15m
-      #- run: abd 
-      - run:
-          name: Install appium server
-          command: |
-             npm update
-             npm install appium@1.11.0
-             npm install wd
-             npm install appium-doctor
-      #- run: appium-doctor       
-      - run:
-          name: Start appium server
-          command: appium -a 127.0.0.1 -p 4723 &
-          #background: true
-          no_output_timeout: 1m
-      #- run: google-chrome --version
-      - run:
-          name: Run TestNG Tests
-          command: java -cp "lib/*:bin/" org.testng.TestNG testng.xml
-          
-      - store_artifacts:
-          path:  test-output
+  # Customize the JVM maximum heap limit
+  MAVEN_OPTS: -Xmx3200m
+  ANDROID_HOME: /usr/local/android-sdk-linux
+
+steps:
+  - checkout
+
+  # Download and cache dependencies
+
+  - restore_cache:
+      keys:
+      - v1-dependencies-{{ checksum "pom.xml" }}
+      # fallback to using the latest cache if no exact match is found
+      - v1-dependencies-
+
+  - run: mvn dependency:go-offline
+
+  - run:
+      name: Install node 
+      command: |
+             curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+             sudo apt-get install -y nodejs
+             sudo apt-get install -y build-essential
+             sudo apt-get install build-essential curl git m4 python-setuptools ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
+  - run:
+      name: Install appium server
+      command: |
+        sudo npm update -g
+        sudo npm install appium
+        sudo npm install wd
+
+  - save_cache:
+      paths:
+        - ~/.m2
+      key: v1-dependencies-{{ checksum "pom.xml" }}
+    
+  - run:
+      name: Start appium server
+      command: appium &
+
+  # run tests!
+  - run: mvn test
+
+  - store_artifacts:
+      path: target/surefire-reports
+      destination: tr1
+  - store_test_results:
+      path: target/surefire-reports
