@@ -46,9 +46,8 @@ jobs:
               sudo npm install wd
 
       - save_cache:
-          paths:
-              - ~/.m2
-           key: v1-dependencies-{{ checksum "pom.xml" }}
+          paths: - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
     
       - run:
           name: Start appium server
