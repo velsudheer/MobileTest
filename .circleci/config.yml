@@ -6,7 +6,7 @@ jobs:
     docker:
       # Android the primary container
       - image: library/ubuntu
-      - image: circleci/android:api-24-alpha
+      #- image: circleci/android:api-24-alpha
       #- image: circleci/openjdk:8-jdk
       #- image: circleci/ruby:2.7-rc
       
@@ -15,13 +15,10 @@ jobs:
       
     steps:
       - checkout
-      # Use BASH instead of DASH! see: https://ubuntuforums.org/showthread.php?t=1932504
-      #- run: apt-get install -y sudo
-      #- run: ls -al /bin/sh && sudo rm /bin/sh && sudo ln -s /bin/bash /bin/sh && ls -al /bin/sh
-      #- run: export PATH=”$HOME/.linuxbrew/bin:$PATH”; export MANPATH=”$HOME/.linuxbrew/share/man:$MANPATH”; export INFOPATH=”$HOME/.linuxbrew/share/info:$INFOPATH”
-      #- run: sudo apt-get install build-essential curl git m4 ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
-      #- run: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install)"
-      #- run: find /home/jeep | grep libpulse.so.0
+      - run: sudo add-apt-repository ppa:webupd8team/java; sudo apt-get update; sudo apt-get install oracle-java8-installer
+      - run: sudo apt-get install oracle-java8-set-default
+      - run: sudo unzip android-studio-ide-141.2178183-linux.zip -d /opt
+      - run: ./studio.sh
       
       - run: 
           name: List available targets and other sdk modules
