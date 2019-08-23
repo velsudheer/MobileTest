@@ -10,8 +10,8 @@ jobs:
       #- image: budtmo/docker-android-x86-5.0.1
       #- image: appium/appium:local
       #- image: circleci/ruby:2.7-rc
-      #- image: circleci/ruby:2.4.1-node-browsers
-      #- image: circleci/android:api-24
+      - image: circleci/ruby:2.4.1-node-browsers
+      - image: circleci/android:api-24
       
     environment:
       # Customize the JVM maximum heap limit
