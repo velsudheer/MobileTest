@@ -5,9 +5,9 @@ jobs:
     working_directory: ~/repo
     docker:
       # Android the primary container
-      - image: library/ubuntu
+      #- image: library/ubuntu
       #- image: circleci/android:api-24-alpha
-      #- image: circleci/openjdk:8-jdk
+      - image: circleci/openjdk:8-jdk
       #- image: circleci/ruby:2.7-rc
       
     environment:
@@ -15,8 +15,7 @@ jobs:
       
     steps:
       - checkout
-      - run: sudo add-apt-repository ppa:webupd8team/java; sudo apt-get update; sudo apt-get install oracle-java8-installer
-      - run: sudo apt-get install oracle-java8-set-default
+      
       - run: sudo unzip android-studio-ide-141.2178183-linux.zip -d /opt
       - run: ./studio.sh
       
