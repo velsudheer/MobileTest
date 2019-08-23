@@ -42,7 +42,7 @@ jobs:
           name: Install appium server
           command: |
               sudo npm update -g
-              sudo npm install yes appium
+              sudo npm install yes appium@1.11.0
               sudo npm install yes wd
 
       - save_cache:
