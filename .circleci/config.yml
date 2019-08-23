@@ -21,18 +21,5 @@ jobs:
     steps:
       - checkout
 
-       # Download and cache dependencies
-
-      # Download dependencies
-      - run: 
-          name: Lists installed targets
-          command: adb list target
-          environment:
-            TERM: dumb
-      - run: 
-          name: List available targets and other sdk modules
-          command: sdkmanager --list --include_obsolete --verbose
-          environment:
-            TERM: dumb
-
+      
    
