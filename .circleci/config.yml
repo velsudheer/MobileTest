@@ -10,8 +10,8 @@ jobs:
       #- image: budtmo/docker-android-x86-5.0.1
       #- image: appium/appium:local
       #- image: circleci/ruby:2.7-rc
-      #- image: circleci/openjdk:8-jdk
-      - image: carlosasj/circleci-android-appium
+      - image: circleci/ruby:2.4.1-node-browsers
+      - image: circleci/android:api-24
       
     environment:
       # Customize the JVM maximum heap limit
@@ -23,41 +23,6 @@ jobs:
 
        # Download and cache dependencies
 
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
-      - run: mvn dependency:go-offline
-
-      - run:
-          name: Install node 
-          command: |
-              curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-              sudo apt-get install -y nodejs
-              sudo apt-get install -y build-essential
-              sudo apt-get install build-essential curl git m4 python-setuptools ruby texinfo libbz2-dev libcurl4-openssl-dev libexpat-dev libncurses-dev zlib1g-dev
-      - run:
-          name: Install appium server
-          command: |
-              sudo npm update -g
-              sudo npm install yes appium@1.11.0
-              sudo npm install yes wd
-
-      - save_cache:
-          paths: ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
-    
-      - run:
-          name: Start appium server
-          command: appium &
-
-      # run tests!
-      - run: mvn test
-
-      - store_artifacts:
-          path: target/surefire-reports
-          destination: tr1
-      - store_test_results:
-          path: target/surefire-reports
+      # Download dependencies
+      - run: gem install appium_lib
+   
